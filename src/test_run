@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -eu
+
+INPUT="data/raw/20170528_2342_lambdaqc20170529"
+
+outdir="output/20170528_2342_lambdaqc20170529"
+if [[ ! -e "${outdir}" ]]; then
+    mkdir -p "${outdir}"
+fi
+
+log_file="${outdir}/albacore.log"
+err_file="${outdir}/albacore.err"
+
+read_fast5_basecaller.py --worker_threads 50 \
+    --input "${INPUT}" \
+    --save_path "${outdir}" \
+    --flowcell "FLO-MIN107" \
+    --kit "SQK-RAD002" \
+    --recursive \
+    --output_format fastq \
+    > "${log_file}" \
+    &> "${err_file}"
