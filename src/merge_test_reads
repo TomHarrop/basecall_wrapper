@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -eu
+
+outdir="output/merged/20170528_2342_lambdaqc20170529"
+if [[ ! -e "${outdir}" ]]; then
+    mkdir -p "${outdir}"
+fi
+
+log_file="${outdir}/reformat.log"
+
+cat output/20170528_2342_lambdaqc20170529/*.fastq |
+    bin/bbmap/reformat.sh \
+    in=stdin.fastq \
+    interleaved=f \
+    "out=${outdir}/merged.fq.gz" \
+    zl=9 \
+    "bhist=${outdir}/bhist.txt" \
+    "qhist=${outdir}/qhist.txt" \
+    "qchist=${outdir}/qchist.txt" \
+    "aqhist=${outdir}/aqhist.txt" \
+    "bqhist=${outdir}/bqhist.txt" \
+    "lhist=${outdir}/lhist.txt" \
+    "gchist=${outdir}/gchist.txt" \
+    gcbins=auto \
+    2> "${log_file}"
