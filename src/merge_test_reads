@@ -9,7 +9,7 @@ fi
 
 log_file="${outdir}/reformat.log"
 
-cat output/20170528_2342_lambdaqc20170529/*.fastq |
+cat output/20170528_2342_lambdaqc20170529/workspace/*.fastq |
     bin/bbmap/reformat.sh \
     in=stdin.fastq \
     interleaved=f \
