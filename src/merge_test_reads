@@ -7,11 +7,14 @@ if [[ ! -e "${outdir}" ]]; then
     mkdir -p "${outdir}"
 fi
 
+tmp_file="${outdir}/tmp.fastq"
 log_file="${outdir}/reformat.log"
 
-cat output/20170528_2342_lambdaqc20170529/workspace/*.fastq |
-    bin/bbmap/reformat.sh \
-    in=stdin.fastq \
+cat output/20170528_2342_lambdaqc20170529/workspace/*.fastq \
+    > "${tmp_file}"
+
+bin/bbmap/reformat.sh \
+    "in=${tmp_file}" \
     interleaved=f \
     "out=${outdir}/merged.fq.gz" \
     zl=9 \
@@ -24,3 +27,5 @@ cat output/20170528_2342_lambdaqc20170529/workspace/*.fastq |
     "gchist=${outdir}/gchist.txt" \
     gcbins=auto \
     2> "${log_file}"
+
+rm "${tmp_file}"
