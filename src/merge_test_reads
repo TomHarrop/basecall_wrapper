@@ -8,13 +8,17 @@ if [[ ! -e "${outdir}" ]]; then
 fi
 
 tmp_file="${outdir}/tmp.fastq"
+f_file="${outdir}/f.fastq"
 log_file="${outdir}/reformat.log"
 
 cat output/20170528_2342_lambdaqc20170529/workspace/*.fastq \
     > "${tmp_file}"
 
+sed -e '/^[[:space:]]*$/d' "${tmp_file}" > "${f_file}"
+
 bin/bbmap/reformat.sh \
-    "in=${tmp_file}" \
+    "in=${f_file}" \
+    minlength=1000 \
     interleaved=f \
     "out=${outdir}/merged.fq.gz" \
     zl=9 \
@@ -28,4 +32,4 @@ bin/bbmap/reformat.sh \
     gcbins=auto \
     2> "${log_file}"
 
-rm "${tmp_file}"
+rm "${tmp_file}" "${f_file}"
