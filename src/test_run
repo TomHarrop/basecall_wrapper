@@ -2,9 +2,9 @@
 
 set -eu
 
-INPUT="data/raw/20170528_2342_lambdaqc20170529"
+INPUT="data/raw/tmp/20170621_0351_ASW_12_05X_SPRI"
 
-outdir="output/20170528_2342_lambdaqc20170529"
+outdir="output/20170621_0351_ASW_12_05X_SPRI_partial"
 if [[ ! -e "${outdir}" ]]; then
     mkdir -p "${outdir}"
 fi
