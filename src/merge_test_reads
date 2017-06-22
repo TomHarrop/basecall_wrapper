@@ -12,7 +12,7 @@ tmp_file="${outdir}/tmp.fastq"
 f_file="${outdir}/f.fastq"
 log_file="${outdir}/reformat.log"
 
-cat "${input}/*.fastq" > "${tmp_file}"
+cat "${input}"/*.fastq > "${tmp_file}"
 
 sed -e '/^[[:space:]]*$/d' "${tmp_file}" > "${f_file}"
 
