@@ -2,7 +2,8 @@
 
 set -eu
 
-outdir="output/merged/20170528_2342_lambdaqc20170529"
+input="output/20170621_0351_ASW_12_05X_SPRI_partial/workspace"
+outdir="output/20170621_0351_ASW_12_05X_SPRI_partial/merged"
 if [[ ! -e "${outdir}" ]]; then
     mkdir -p "${outdir}"
 fi
@@ -11,8 +12,7 @@ tmp_file="${outdir}/tmp.fastq"
 f_file="${outdir}/f.fastq"
 log_file="${outdir}/reformat.log"
 
-cat output/20170528_2342_lambdaqc20170529/workspace/*.fastq \
-    > "${tmp_file}"
+cat "${input}/*.fastq" > "${tmp_file}"
 
 sed -e '/^[[:space:]]*$/d' "${tmp_file}" > "${f_file}"
 
