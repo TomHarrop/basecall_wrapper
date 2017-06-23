@@ -2,8 +2,8 @@
 
 set -eu
 
-input="output/20170621_0351_ASW_12_05X_SPRI_partial/workspace"
-outdir="output/20170621_0351_ASW_12_05X_SPRI_partial/merged"
+input="output/20170621_0351_ASW_12_05X_SPRI/workspace"
+outdir="output/20170621_0351_ASW_12_05X_SPRI/merged"
 if [[ ! -e "${outdir}" ]]; then
     mkdir -p "${outdir}"
 fi
@@ -18,7 +18,6 @@ sed -e '/^[[:space:]]*$/d' "${tmp_file}" > "${f_file}"
 
 bin/bbmap/reformat.sh \
     "in=${f_file}" \
-    minlength=1000 \
     interleaved=f \
     "out=${outdir}/merged.fq.gz" \
     zl=9 \
