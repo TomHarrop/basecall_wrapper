@@ -15,16 +15,23 @@ if [[ ! -e "${outdir}" ]]; then
 fi
 
 # extract files to temporary directory
-tmpdir="$(TMPDIR="${outdir}" mktemp --directory)"
-for tarfile in "${input_files[@]}"; do
-    tar xvf "${tarfile}" -C "${tmpdir}" 
-done
+tmpdir="output/basecalled/tmp.c7fxojBGNo"
+# tmpdir="$(TMPDIR="${outdir}" mktemp --directory)"
+# printf "[ %s: Extracting raw data ]\ntmpdir:\t%s\n" \
+#     "$(date)" "${tmpdir}"
+# for tarfile in "${input_files[@]}"; do
+#     printf "%s\n" "${tarfile}"
+#     tar xvf "${tarfile}" -C "${tmpdir}" 
+# done
 
 # set up files
 log_file="${outdir}/albacore.log"
 err_file="${outdir}/albacore.err"
 
 # basecall from temporary directory
+printf "[ %s: Calling read_fast5_basecaller.py ]\noutdir:\t%s\n" \
+    "$(date)" "${outdir}"
+
 read_fast5_basecaller.py --worker_threads 50 \
     --input "${tmpdir}" \
     --save_path "${outdir}" \
@@ -36,4 +43,5 @@ read_fast5_basecaller.py --worker_threads 50 \
     &> "${err_file}"
 
 # tidy up temp files
+printf "[ %s: Removing tempfiles ]\n" "$(date)"
 rm -r "${tmpdir}"
