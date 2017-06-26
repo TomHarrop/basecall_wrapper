@@ -2,20 +2,24 @@
 
 set -eu
 
-input="output/20170621_0351_ASW_12_05X_SPRI/workspace"
-outdir="output/20170621_0351_ASW_12_05X_SPRI/merged"
+input="output/basecalled/workspace"
+outdir="output/basecalled/merged"
 if [[ ! -e "${outdir}" ]]; then
     mkdir -p "${outdir}"
 fi
 
+# intermediate files
 tmp_file="${outdir}/tmp.fastq"
 f_file="${outdir}/f.fastq"
 log_file="${outdir}/reformat.log"
 
+# put all the reads in the same file
 cat "${input}"/*.fastq > "${tmp_file}"
 
+# remove blank lines
 sed -e '/^[[:space:]]*$/d' "${tmp_file}" > "${f_file}"
 
+# compress and get stats with bbmap
 bin/bbmap/reformat.sh \
     "in=${f_file}" \
     interleaved=f \
@@ -31,4 +35,5 @@ bin/bbmap/reformat.sh \
     gcbins=auto \
     2> "${log_file}"
 
+# tidy up
 rm "${tmp_file}" "${f_file}"
