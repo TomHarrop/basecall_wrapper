@@ -3,10 +3,10 @@
 set -eu
 
 input_files=( 
-    20170621_0344_ASW_12_05X_SPRI.tar.gz
-    20170622_2306_ASW12_04xSPRI_20170623.tar.gz
-    20170621_0351_ASW_12_05X_SPRI.tar.gz
-    20170622_2313_ASW12_04xSPRI_20170623.tar.gz
+    data/raw/20170621_0344_ASW_12_05X_SPRI.tar.gz
+    data/raw/20170622_2306_ASW12_04xSPRI_20170623.tar.gz
+    data/raw/20170621_0351_ASW_12_05X_SPRI.tar.gz
+    data/raw/20170622_2313_ASW12_04xSPRI_20170623.tar.gz
  )
 
 outdir="output/basecalled"
