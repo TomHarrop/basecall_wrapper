@@ -3,10 +3,7 @@
 set -eu
 
 input_files=( 
-    data/raw/20170621_0344_ASW_12_05X_SPRI.tar.gz
-    data/raw/20170622_2306_ASW12_04xSPRI_20170623.tar.gz
-    data/raw/20170621_0351_ASW_12_05X_SPRI.tar.gz
-    data/raw/20170622_2313_ASW12_04xSPRI_20170623.tar.gz
+    data/20170731_2226_2234_Mh78_1.tar.gz
  )
 
 outdir="output/basecalled"
@@ -15,14 +12,13 @@ if [[ ! -e "${outdir}" ]]; then
 fi
 
 # extract files to temporary directory
-tmpdir="output/basecalled/tmp.c7fxojBGNo"
-# tmpdir="$(TMPDIR="${outdir}" mktemp --directory)"
-# printf "[ %s: Extracting raw data ]\ntmpdir:\t%s\n" \
-#     "$(date)" "${tmpdir}"
-# for tarfile in "${input_files[@]}"; do
-#     printf "%s\n" "${tarfile}"
-#     tar xvf "${tarfile}" -C "${tmpdir}" 
-# done
+tmpdir="$(mktemp --directory -p "${outdir}")"
+printf "[ %s: Extracting raw data ]\ntmpdir:\t%s\n" \
+    "$(date)" "${tmpdir}"
+for tarfile in "${input_files[@]}"; do
+    printf "%s\n" "${tarfile}"
+    tar xvf "${tarfile}" -C "${tmpdir}" 
+done
 
 # set up files
 log_file="${outdir}/albacore.log"
@@ -35,8 +31,8 @@ printf "[ %s: Calling read_fast5_basecaller.py ]\noutdir:\t%s\n" \
 read_fast5_basecaller.py --worker_threads 50 \
     --input "${tmpdir}" \
     --save_path "${outdir}" \
-    --flowcell "FLO-MIN107" \
-    --kit "SQK-RAD002" \
+    --flowcell "FLO-MIN106" \
+    --kit "SQK-RAD003" \
     --recursive \
     --output_format fastq \
     > "${log_file}" \
