@@ -21,6 +21,7 @@ sed -e '/^[[:space:]]*$/d' "${tmp_file}" > "${f_file}"
 
 # compress and get stats with bbmap
 bin/bbmap/reformat.sh \
+    -Xmx200g \
     "in=${f_file}" \
     interleaved=f \
     "out=${outdir}/merged.fq.gz" \
