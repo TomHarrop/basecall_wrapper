@@ -3,7 +3,7 @@
 set -eu
 
 input_files=( 
-    data/20170807_0633_0640_asw_14_precipitation.tar.gz
+    data/20170819_0106__0113_LUG8.tar.gz
  )
 
 outdir="output/basecalled"
