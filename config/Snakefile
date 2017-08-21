@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-import os
-
 # get config variables
-print('config: %s' % config)
-outdir = config["other_output"]
-input_files = config["other_input"]
+#print('config: %s' % config)
+outdir = config['outdir']
+raw_data = config['raw_data']
+log_dir = config['log_dir']
 
 # intermediate files
 unzip_folder = os.path.join(outdir, 'unzipped_raw_data')
@@ -22,7 +21,7 @@ rule all:
 # unzip raw data to temp folder
 rule unzip:
     input:
-        input_files
+        raw_data
     output:
         temp(touch(unzip_tmpfile)),
         folder = unzip_folder
