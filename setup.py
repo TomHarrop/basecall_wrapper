@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import pip
 from setuptools import setup
+from setuptools.command.install import install
 from setuptools import find_packages
+
+class PostInstallCommand(install):
+    """Post-installation for installation mode."""
+    def run(self):
+        pip.main(['install', 'https://mirror.oxfordnanoportal.com/software/analysis/ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl'])
 
 setup(
     name='basecall_wrapper',
@@ -14,10 +21,7 @@ setup(
     license='GPL-3',
     packages=find_packages(),
     install_requires=[
-        'snakemake>=4.0.0',
-        'ont_albacore>=1.2.6'
+        'snakemake>=4.0.0'
     ],
-    dependency_links=[
-        'https://mirror.oxfordnanoportal.com/software/analysis/ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl'
-    ],
-    zip_safe=False)
+    zip_safe=False,
+    cmdclass={'install': PostInstallCommand})
