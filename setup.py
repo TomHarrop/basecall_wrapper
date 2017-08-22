@@ -14,7 +14,7 @@ bbmap_error = ('BBMap stats.sh was not detected.\n'
                'available from $PATH.\n'
                'http://jgi.doe.gov/data-and-tools/bbtools/'
                'bb-tools-user-guide/bbmap-guide/')
-if shutil.which('stats.sh') is None:
+if shutil.which('reformat.sh') is None:
     raise EnvironmentError(bbmap_error)
 
 mac_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
