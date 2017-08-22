@@ -44,7 +44,6 @@ def main():
     snakefile = resource_filename(__name__, 'config/Snakefile')
 
     # parse fasta file from command line
-    generate_message("Parsing files")
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '--input',
@@ -71,9 +70,14 @@ def main():
         help='Sequencing kit, e.g. SQK-RAD003',
         type=str,
         dest='kit')
-
+    default_threads = min(os.cpu_count() // 2, 50)
+    parser.add_argument(
+        '--threads',
+        help=('Number of threads. Default: %i' % default_threads),
+        type=int,
+        dest='threads',
+        default=default_threads)
     args = vars(parser.parse_args())
-    print("Parsed arguments: %s" % args)
 
     # set up logging
     outdir = args['outdir']
@@ -88,7 +92,8 @@ def main():
     #run the pipeline
     snakemake.snakemake(
         snakefile=snakefile,
-        config=args)
+        config=args,
+        cores=args['threads'])
 
     # print after dag
     print_graph(snakefile, args, os.path.join(log_dir, "after.svg"))
