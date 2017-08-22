@@ -9,10 +9,11 @@ from setuptools import find_packages
 class PostInstallCommand(install):
     """Post-installation for installation mode."""
     def run(self):
-        pip.main(['install', 'https://mirror.oxfordnanoportal.com/software/analysis/ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl'])
         install.run(self)
+        pip.main(['install', 'https://mirror.oxfordnanoportal.com/software/analysis/ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl'])
 
 setup(
+    cmdclass={'install': PostInstallCommand},
     name='basecall_wrapper',
     version='0.0.1',
     description='Tom\'s wrapper for ONT albacore',
@@ -24,5 +25,4 @@ setup(
     install_requires=[
         'snakemake>=4.0.0'
     ],
-    zip_safe=False,
-    cmdclass={'install': PostInstallCommand})
+    zip_safe=False)
