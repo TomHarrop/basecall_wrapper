@@ -6,11 +6,16 @@ from setuptools import setup
 from setuptools.command.install import install
 from setuptools import find_packages
 
+mac_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
+           'ont_albacore-1.2.6-cp36-cp36m-macosx_10_11_x86_64.whl')
+linux_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
+             'ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl')
+
 class PostInstallCommand(install):
     """Post-installation for installation mode."""
     def run(self):
         install.run(self)
-        pip.main(['install', 'https://mirror.oxfordnanoportal.com/software/analysis/ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl'])
+        pip.main(['install', mac_url])
 
 setup(
     cmdclass={'install': PostInstallCommand},
