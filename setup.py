@@ -10,6 +10,7 @@ class PostInstallCommand(install):
     """Post-installation for installation mode."""
     def run(self):
         pip.main(['install', 'https://mirror.oxfordnanoportal.com/software/analysis/ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl'])
+        install.run(self)
 
 setup(
     name='basecall_wrapper',
