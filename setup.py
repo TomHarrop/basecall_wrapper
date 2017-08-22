@@ -9,7 +9,7 @@ from setuptools.command.install import install
 from setuptools import find_packages
 
 # check if bbtools is installed
-bbmap_error = ('BBMap stats.sh was not detected.\n'
+bbmap_error = ('BBMap reformat.sh was not detected.\n'
                'Make sure BBMap is installed and the scripts are\n'
                'available from $PATH.\n'
                'http://jgi.doe.gov/data-and-tools/bbtools/'

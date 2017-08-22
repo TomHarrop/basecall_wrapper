@@ -14,6 +14,7 @@ unzip_tmpfile = os.path.join(unzip_folder, 'tmp_file')
 basecall_folder = os.path.join(outdir, 'basecalled')
 basecall_tempfile = os.path.join(basecall_folder, 'tmp_file')
 merged_folder = os.path.join(outdir, 'merged')
+temp_fq = os.path.join(merged_folder, 'tmp.fq')
 final_fq = os.path.join(merged_folder, 'merged.fq.gz')
 
 # master rule
@@ -60,7 +61,29 @@ rule merge:
     input:
         basecall_folder
     output:
-        touch(final_fq)
+        temp(temp_fq)
     shell:
-        'printf "i:\t%s\no:\t%s\n" "{input}/workspace" {output}'
+        'cat {input}/workspace/*.fastq | '
+        'sed -e \'/^[[:space:]]*$/d\' > '
+        '{output}'
 
+# reformat
+rule reformat:
+    input:
+        temp_fq
+    output:
+        final_fq
+    shell:
+        'reformat.sh '
+        'in={input} '
+        'interleaved=f '
+        'out={input} '
+        'zl=9 '
+        'bhist={merged_folder}/bhist.txt '
+        'qhist={merged_folder}/qhist.txt ' 
+        'qchist={merged_folder}/qchist.txt ' 
+        'aqhist={merged_folder}/aqhist.txt '
+        'bqhist={merged_folder}/bqhist.txt '
+        'lhist={merged_folder}/lhist.txt '
+        'gchist={merged_folder}/gchist.txt ' 
+        'gcbins=auto'
