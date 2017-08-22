@@ -8,29 +8,7 @@ import shutil
 import subprocess
 import sys
 from pkg_resources import resource_filename
-
-# make sure virtualenv is active or try to activate it
-try:
-    import snakemake
-except ImportError:
-    print("Missing snakemake, trying to find virtualenv")
-    try:
-        venv_path = [x for (x, y, z) in os.walk('.')
-                     if 'activate_this.py' in z][0]
-        virtualenv_file = os.path.join(venv_path, 'activate_this.py')
-        print("Trying to activate virtualenv: %s"
-              % virtualenv_file)
-        global_namespace = {
-            "__file__": virtualenv_file,
-            "__name__": "__main__",
-        }
-        with open(virtualenv_file, 'rb') as file:
-            exec(compile(file.read(), virtualenv_file, 'exec'),
-                 global_namespace)
-        import snakemake
-    except:
-        raise ImportError("Couldn't activate virtualenv")
-
+import snakemake
 
 # FUNCTIONS
 def generate_message(message_text):
@@ -64,10 +42,6 @@ def print_graph(snakefile, config, dag_file):
 def main():
     # GLOBALS
     snakefile = resource_filename(__name__, 'config/Snakefile')
-
-    # did the virtualenv work?
-    generate_message("Using python3 binary: %s" %
-                     shutil.which("python3"))
 
     # parse fasta file from command line
     generate_message("Parsing files")
