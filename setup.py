@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from sys import platform
 import pip
 from setuptools import setup
 from setuptools.command.install import install
@@ -15,7 +16,10 @@ class PostInstallCommand(install):
     """Post-installation for installation mode."""
     def run(self):
         install.run(self)
-        pip.main(['install', mac_url])
+        if platform == 'darwin':
+            pip.main(['install', mac_url])
+        elif platform.startswith('linux'):
+            pip.main(['install', linux_url])
 
 setup(
     cmdclass={'install': PostInstallCommand},
@@ -35,7 +39,6 @@ setup(
             'basecall_wrapper = basecall_wrapper.__main__:main'
             ],
     },
-    include_package_data=True,
     package_data={
         'basecall_wrapper': ['config/Snakefile'],
     },
