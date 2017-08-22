@@ -30,4 +30,9 @@ setup(
     install_requires=[
         'snakemake>=4.0.0'
     ],
+    entry_points={
+        'console_scripts': [
+            'basecall_wrapper = basecall_wrapper.__main__:main'
+            ]
+    },
     zip_safe=False)

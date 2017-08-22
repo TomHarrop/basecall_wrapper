@@ -60,59 +60,63 @@ def print_graph(snakefile, config, dag_file):
         dot_process.communicate(input=output.encode())
 
 
-# GLOBALS
-snakefile = 'basecall_wrapper/Snakefile'
+def main():
+    # GLOBALS
+    snakefile = 'basecall_wrapper/Snakefile'
 
-# did the virtualenv work?
-generate_message("Using virtualenv python3: %s" %
-                 shutil.which("python3"))
+    # did the virtualenv work?
+    generate_message("Using virtualenv python3: %s" %
+                     shutil.which("python3"))
 
-# parse fasta file from command line
-generate_message("Parsing files")
-parser = argparse.ArgumentParser()
-parser.add_argument(
-            '--input',
-            required=True,
-            help='.tar.gz files containing raw Nanopore data folders',
-            type=str,
-            dest='raw_data',
-            action='append')
-parser.add_argument(
-            '--outdir',
-            required=True,
-            help='Output directory',
-            type=str,
-            dest='outdir')
-parser.add_argument(
-            '--flowcell',
-            required=True,
-            help='Flowcell type, e.g. FLO-MIN106',
-            type=str,
-            dest='flowcell')
-parser.add_argument(
-            '--kit',
-            required=True,
-            help='Sequencing kit, e.g. SQK-RAD003',
-            type=str,
-            dest='kit')
+    # parse fasta file from command line
+    generate_message("Parsing files")
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        '--input',
+        required=True,
+        help='.tar.gz files containing raw Nanopore data folders',
+        type=str,
+        dest='raw_data',
+        action='append')
+    parser.add_argument(
+        '--outdir',
+        required=True,
+        help='Output directory',
+        type=str,
+        dest='outdir')
+    parser.add_argument(
+        '--flowcell',
+        required=True,
+        help='Flowcell type, e.g. FLO-MIN106',
+        type=str,
+        dest='flowcell')
+    parser.add_argument(
+        '--kit',
+        required=True,
+        help='Sequencing kit, e.g. SQK-RAD003',
+        type=str,
+        dest='kit')
 
-args = vars(parser.parse_args())
-print("Parsed arguments: %s" % args)
+    args = vars(parser.parse_args())
+    print("Parsed arguments: %s" % args)
 
-# set up logging
-outdir = args['outdir']
-log_dir = os.path.join(outdir, 'logs')
-args['log_dir'] = log_dir
-if not os.path.isdir(log_dir):
-    os.makedirs(log_dir)
+    # set up logging
+    outdir = args['outdir']
+    log_dir = os.path.join(outdir, 'logs')
+    args['log_dir'] = log_dir
+    if not os.path.isdir(log_dir):
+        os.makedirs(log_dir)
 
-# print before dag
-print_graph(snakefile, args, os.path.join(log_dir, "before.svg"))
+    # print before dag
+    print_graph(snakefile, args, os.path.join(log_dir, "before.svg"))
 
-#run the pipeline
-snakemake.snakemake(
-    snakefile=snakefile,
-    config=args)
+    #run the pipeline
+    snakemake.snakemake(
+        snakefile=snakefile,
+        config=args)
 
-# print after dag
-print_graph(snakefile, args, os.path.join(log_dir, "after.svg"))
+    # print after dag
+    print_graph(snakefile, args, os.path.join(log_dir, "after.svg"))
+
+if __name__ == '__main__':
+    main()
