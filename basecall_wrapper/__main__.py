@@ -7,6 +7,7 @@ import os
 import shutil
 import subprocess
 import sys
+from pkg_resources import resource_filename
 
 # make sure virtualenv is active or try to activate it
 try:
@@ -62,7 +63,7 @@ def print_graph(snakefile, config, dag_file):
 
 def main():
     # GLOBALS
-    snakefile = 'config/Snakefile'
+    snakefile = resource_filename(__name__, 'config/Snakefile')
 
     # did the virtualenv work?
     generate_message("Using virtualenv python3: %s" %
