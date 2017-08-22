@@ -3,9 +3,19 @@
 
 from sys import platform
 import pip
+import shutil
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools import find_packages
+
+# check if bbtools is installed
+bbmap_error = ('BBMap stats.sh was not detected.\n'
+               'Make sure BBMap is installed and the scripts are\n'
+               'available from $PATH.\n'
+               'http://jgi.doe.gov/data-and-tools/bbtools/'
+               'bb-tools-user-guide/bbmap-guide/')
+if shutil.which('stats.sh') is None:
+    raise EnvironmentError(bbmap_error)
 
 mac_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
            'ont_albacore-1.2.6-cp36-cp36m-macosx_10_11_x86_64.whl')
