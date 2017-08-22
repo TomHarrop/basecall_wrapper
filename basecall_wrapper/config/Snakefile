@@ -16,6 +16,9 @@ basecall_tempfile = os.path.join(basecall_folder, 'tmp_file')
 merged_folder = os.path.join(outdir, 'merged')
 temp_fq = os.path.join(merged_folder, 'tmp.fq')
 final_fq = os.path.join(merged_folder, 'merged.fq.gz')
+stats_dir = os.path.join(outdir, 'stats')
+if not os.path.isdir(stats_dir):
+    os.makedirs(stats_dir)
 
 # master rule
 rule all:
@@ -73,17 +76,20 @@ rule reformat:
         temp_fq
     output:
         final_fq
+    log:
+        os.path.join(log_dir, 'reformat.log')
     shell:
         'reformat.sh '
         'in={input} '
         'interleaved=f '
-        'out={input} '
+        'out={output} '
         'zl=9 '
-        'bhist={merged_folder}/bhist.txt '
-        'qhist={merged_folder}/qhist.txt ' 
-        'qchist={merged_folder}/qchist.txt ' 
-        'aqhist={merged_folder}/aqhist.txt '
-        'bqhist={merged_folder}/bqhist.txt '
-        'lhist={merged_folder}/lhist.txt '
-        'gchist={merged_folder}/gchist.txt ' 
-        'gcbins=auto'
+        'bhist={stats_dir}/bhist.txt '
+        'qhist={stats_dir}/qhist.txt ' 
+        'qchist={stats_dir}/qchist.txt ' 
+        'aqhist={stats_dir}/aqhist.txt '
+        'bqhist={stats_dir}/bqhist.txt '
+        'lhist={stats_dir}/lhist.txt '
+        'gchist={stats_dir}/gchist.txt ' 
+        'gcbins=auto '
+        '2> {log}'
