@@ -83,13 +83,24 @@ parser.add_argument(
             help='Output directory',
             type=str,
             dest='outdir')
+parser.add_argument(
+            '--flowcell',
+            required=True,
+            help='Flowcell type, e.g. FLO-MIN106',
+            type=str,
+            dest='flowcell')
+parser.add_argument(
+            '--kit',
+            required=True,
+            help='Sequencing kit, e.g. SQK-RAD003',
+            type=str,
+            dest='kit')
+
 args = vars(parser.parse_args())
-raw_data = [x for x in args['raw_data']]
-outdir = args['outdir']
-print("Input file(s): %s" % raw_data)
-print("Output folder: %s" % outdir)
+print("Parsed arguments: %s" % args)
 
 # set up logging
+outdir = args['outdir']
 log_dir = os.path.join(outdir, 'logs')
 args['log_dir'] = log_dir
 if not os.path.isdir(log_dir):
@@ -99,7 +110,6 @@ if not os.path.isdir(log_dir):
 print_graph(snakefile, args, os.path.join(log_dir, "before.svg"))
 
 #run the pipeline
-print("args: %s" % args)
 snakemake.snakemake(
     snakefile=snakefile,
     config=args)
