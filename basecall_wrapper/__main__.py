@@ -66,7 +66,7 @@ def main():
     snakefile = resource_filename(__name__, 'config/Snakefile')
 
     # did the virtualenv work?
-    generate_message("Using virtualenv python3: %s" %
+    generate_message("Using python3 binary: %s" %
                      shutil.which("python3"))
 
     # parse fasta file from command line
