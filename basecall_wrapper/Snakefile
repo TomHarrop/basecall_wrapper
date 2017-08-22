@@ -12,6 +12,7 @@ kit = config['kit']
 unzip_folder = os.path.join(outdir, 'unzipped_raw_data')
 unzip_tmpfile = os.path.join(unzip_folder, 'tmp_file')
 basecall_folder = os.path.join(outdir, 'basecalled/workspace')
+basecall_tempfile = os.path.join(basecall_folder, 'tmp_file')
 merged_folder = os.path.join(outdir, 'merged')
 final_fq = os.path.join(merged_folder, 'merged.fq.gz')
 
@@ -37,10 +38,10 @@ rule basecall:
     input:
         unzip_folder
     output:
+        temp(touch(basecall_tempfile)),
         folder = basecall_folder
-        files = '{output.folder}/{filename}.fastq'
     shell:
-        'printf "i:\t%s\no:\t%s\n" {input} {output}'
+        'printf "i:\t%s\no:\t%s\n" {input} {output.folder}'
 
 # merge
 rule merge:

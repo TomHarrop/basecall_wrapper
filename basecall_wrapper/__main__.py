@@ -61,7 +61,7 @@ def print_graph(snakefile, config, dag_file):
 
 
 # GLOBALS
-snakefile = 'config/Snakefile'
+snakefile = 'basecall_wrapper/Snakefile'
 
 # did the virtualenv work?
 generate_message("Using virtualenv python3: %s" %
