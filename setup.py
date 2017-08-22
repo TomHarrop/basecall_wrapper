@@ -33,6 +33,10 @@ setup(
     entry_points={
         'console_scripts': [
             'basecall_wrapper = basecall_wrapper.__main__:main'
-            ]
+            ],
+    },
+    include_package_data=True,
+    package_data={
+        'basecall_wrapper': ['config/Snakefile'],
     },
     zip_safe=False)
