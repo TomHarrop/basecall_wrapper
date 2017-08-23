@@ -7,7 +7,7 @@ Requirements
 ------------
 
 * ``python3`` 3.5 or newer with ``pip``
-* ```BBmap`` <nhttp://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmap-guide/>`
+* ```BBmap`` <http://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmap-guide/>`
 
 Installation
 ------------

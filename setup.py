@@ -41,11 +41,17 @@ if sys.platform == 'darwin':
 if shutil.which('reformat.sh') is None:
     raise EnvironmentError(bbmap_error)
 
+# load README.rst
+def readme():
+    with open('README.rst') as file:
+        return file.read()
+
 # main setup script
 setup(
     name='basecall_wrapper',
-    version='0.0.4',
+    version='0.0.5',
     description='Tom\'s wrapper for ONT albacore',
+    long_description=readme(),
     url='https://github.com/TomHarrop/basecall_wrapper',
     author='Tom Harrop',
     author_email='twharrop@gmail.com',
