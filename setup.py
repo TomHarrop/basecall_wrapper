@@ -33,7 +33,7 @@ class PostInstallCommand(install):
 
 setup(
     name='basecall_wrapper',
-    version='0.0.1',
+    version='0.0.2',
     description='Tom\'s wrapper for ONT albacore',
     url='https://github.com/TomHarrop/basecall_wrapper',
     author='Tom Harrop',
@@ -41,7 +41,8 @@ setup(
     license='GPL-3',
     packages=find_packages(),
     install_requires=[
-        'snakemake>=4.0.0'
+        'snakemake>=4.0.0',
+        'psutil>=5.2.2'
     ],
     cmdclass={'install': PostInstallCommand},
     entry_points={
