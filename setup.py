@@ -33,7 +33,7 @@ class PostInstallCommand(install):
 
 setup(
     name='basecall_wrapper',
-    version='0.0.2',
+    version='0.0.3',
     description='Tom\'s wrapper for ONT albacore',
     url='https://github.com/TomHarrop/basecall_wrapper',
     author='Tom Harrop',

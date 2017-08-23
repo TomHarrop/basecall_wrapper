@@ -78,7 +78,7 @@ def main():
         type=int,
         dest='threads',
         default=default_threads)
-    default_mem = (virtual_memory().free * 0.5 // 1e9)
+    default_mem = int(virtual_memory().free * 0.5 // 1e9)
     parser.add_argument(
         '--memory',
         help=('Memory limit. Default: %i' % default_mem),
