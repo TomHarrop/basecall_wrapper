@@ -32,7 +32,6 @@ class PostInstallCommand(install):
             pip.main(['install', linux_url])
 
 setup(
-    cmdclass={'install': PostInstallCommand},
     name='basecall_wrapper',
     version='0.0.1',
     description='Tom\'s wrapper for ONT albacore',
@@ -44,6 +43,7 @@ setup(
     install_requires=[
         'snakemake>=4.0.0'
     ],
+    cmdclass={'install': PostInstallCommand},
     entry_points={
         'console_scripts': [
             'basecall_wrapper = basecall_wrapper.__main__:main'

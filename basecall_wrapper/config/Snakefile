@@ -43,12 +43,12 @@ rule basecall:
         unzip_folder
     output:
         temp(touch(basecall_tempfile)),
-        folder=basecall_folder
+        folder = basecall_folder
     params:
-        kit=kit,
-        flowcell=flowcell
+        kit = kit,
+        flowcell = flowcell
     threads:
-        50
+        config['threads']
     shell:
         'read_fast5_basecaller.py '
         '--worker_threads {threads} '
@@ -76,20 +76,23 @@ rule reformat:
         temp_fq
     output:
         final_fq
+    params:
+        memory = config['memory']
     log:
         os.path.join(log_dir, 'reformat.log')
     shell:
         'reformat.sh '
+        '-Xmx{params.memory}g '
         'in={input} '
         'interleaved=f '
         'out={output} '
         'zl=9 '
         'bhist={stats_dir}/bhist.txt '
-        'qhist={stats_dir}/qhist.txt ' 
-        'qchist={stats_dir}/qchist.txt ' 
+        'qhist={stats_dir}/qhist.txt '
+        'qchist={stats_dir}/qchist.txt '
         'aqhist={stats_dir}/aqhist.txt '
         'bqhist={stats_dir}/bqhist.txt '
         'lhist={stats_dir}/lhist.txt '
-        'gchist={stats_dir}/gchist.txt ' 
+        'gchist={stats_dir}/gchist.txt '
         'gcbins=auto '
         '2> {log}'

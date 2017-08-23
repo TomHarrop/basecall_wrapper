@@ -4,11 +4,12 @@ import argparse
 import datetime
 import io
 import os
-import shutil
+from pkg_resources import resource_filename
+from psutil import virtual_memory
 import subprocess
 import sys
-from pkg_resources import resource_filename
 import snakemake
+
 
 # FUNCTIONS
 def generate_message(message_text):
@@ -77,6 +78,14 @@ def main():
         type=int,
         dest='threads',
         default=default_threads)
+    default_mem = (virtual_memory().free * 0.5 // 1e9)
+    parser.add_argument(
+        '--memory',
+        help=('Memory limit. Default: %i' % default_mem),
+        type=int,
+        dest='memory',
+        default=default_mem)
+
     args = vars(parser.parse_args())
 
     # set up logging
@@ -89,14 +98,16 @@ def main():
     # print before dag
     print_graph(snakefile, args, os.path.join(log_dir, "before.svg"))
 
-    #run the pipeline
+    # run the pipeline
     snakemake.snakemake(
         snakefile=snakefile,
         config=args,
-        cores=args['threads'])
+        cores=args['threads'],
+        timestamp=True)
 
     # print after dag
     print_graph(snakefile, args, os.path.join(log_dir, "after.svg"))
+
 
 if __name__ == '__main__':
     main()
