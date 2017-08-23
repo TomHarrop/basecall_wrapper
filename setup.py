@@ -62,6 +62,9 @@ setup(
             ],
     },
     package_data={
-        'basecall_wrapper': ['config/Snakefile'],
+        'basecall_wrapper': [
+            'config/Snakefile',
+            'README.rst'
+        ],
     },
     zip_safe=False)
