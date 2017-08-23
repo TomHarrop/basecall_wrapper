@@ -1,39 +1,50 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from sys import platform
-import pip
 import shutil
+import sys
+import pip
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools import find_packages
 
-# check if bbtools is installed
-bbmap_error = ('BBMap reformat.sh was not detected.\n'
-               'Make sure BBMap is installed and the scripts are\n'
-               'available from $PATH.\n'
-               'http://jgi.doe.gov/data-and-tools/bbtools/'
-               'bb-tools-user-guide/bbmap-guide/')
-if shutil.which('reformat.sh') is None:
-    raise EnvironmentError(bbmap_error)
-
+# post-install albacore
 mac_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
            'ont_albacore-1.2.6-cp36-cp36m-macosx_10_11_x86_64.whl')
-linux_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
-             'ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl')
+linux_py4_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
+                 'ont_albacore-1.2.6-cp34-cp34m-manylinux1_x86_64.whl')
+linux_py5_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
+                 'ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl')
 
 class PostInstallCommand(install):
     """Post-installation for installation mode."""
     def run(self):
         install.run(self)
-        if platform == 'darwin':
+        if sys.platform == 'darwin':
             pip.main(['install', mac_url])
-        elif platform.startswith('linux'):
-            pip.main(['install', linux_url])
+        elif sys.platform.startswith('linux'):
+            if sys.version_info.minor == 4:
+                pip.main(['install', linux_py4_url])
+            elif sys.version_info.minor > 4:
+                pip.main(['install', linux_py5_url])
 
+# check if bbtools is installed
+bbmap_error = ('BBMap reformat.sh was not detected. '
+               'Make sure BBMap is installed and the scripts are '
+               'available from $PATH.'
+               '\nhttp://jgi.doe.gov/data-and-tools/bbtools/'
+               'bb-tools-user-guide/bbmap-guide/')
+if sys.platform == 'darwin':
+    bbmap_error += ('\n'
+                    'On macOS, BBMap can be installed with '
+                    '`brew install bbtools`')
+if shutil.which('reformat.sh') is None:
+    raise EnvironmentError(bbmap_error)
+
+# main setup script
 setup(
     name='basecall_wrapper',
-    version='0.0.3',
+    version='0.0.4',
     description='Tom\'s wrapper for ONT albacore',
     url='https://github.com/TomHarrop/basecall_wrapper',
     author='Tom Harrop',
