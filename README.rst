@@ -12,4 +12,4 @@ Requirements
 Installation
 ------------
 
-``pip3 install git+git://github.com/tomharrop/basecall_wrapper``
+``pip3 install git+git://github.com/tomharrop/basecall_wrapper.git``
