@@ -49,7 +49,7 @@ def readme():
 # main setup script
 setup(
     name='basecall_wrapper',
-    version='0.0.5',
+    version='0.0.6',
     description='Tom\'s wrapper for ONT albacore',
     long_description=readme(),
     url='https://github.com/TomHarrop/basecall_wrapper',
@@ -58,8 +58,10 @@ setup(
     license='GPL-3',
     packages=find_packages(),
     install_requires=[
-        'snakemake>=4.0.0',
-        'psutil>=5.2.2'
+        'biopython>=1.70',
+        'numpy>=1.13.1',
+        'psutil>=5.2.2',
+        'snakemake>=4.0.0'        
     ],
     cmdclass={'install': PostInstallCommand},
     entry_points={

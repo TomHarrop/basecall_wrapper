@@ -4,6 +4,7 @@ import argparse
 import datetime
 import io
 import os
+from Bio import SeqIO
 from pkg_resources import resource_filename
 from psutil import virtual_memory
 import subprocess
@@ -17,7 +18,7 @@ def generate_message(message_text):
     now = datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Y')
     print('[ %s ]: %s' % (now, message_text))
 
-
+# graph printing
 def print_graph(snakefile, config, dag_file):
     # store old stdout
     stdout = sys.stdout
@@ -38,6 +39,30 @@ def print_graph(snakefile, config, dag_file):
             stdin=subprocess.PIPE,
             stdout=svg)
         dot_process.communicate(input=output.encode())
+
+
+# fastq sorting
+def sort_fastq_by_readlength(input_fq, output_fq):
+    '''Sort input_fq file and write to output_fq'''
+    # make a sorted list of tuples of scaffold name and sequence length
+    length_id_unsorted = ((len(rec), rec.id) for
+                          rec in SeqIO.parse(input_fq, 'fastq'))
+    length_and_id = sorted(length_id_unsorted)
+
+    # get an iterator sorted by read length
+    longest_to_shortest = reversed([id for (length, id) in length_and_id])
+
+    # release scaffolds_file from memory
+    del length_and_id
+
+    # build an index of the fasta file
+    record_index = SeqIO.index(input_fq, 'fastq')
+
+    # write selected records in correct order to disk
+    ordered_records = (record_index[id] for id in longest_to_shortest)
+    SeqIO.write(sequences=ordered_records,
+                handle=output_fq,
+                format='fastq')
 
 
 def main():

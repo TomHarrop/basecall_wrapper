@@ -15,7 +15,9 @@ basecall_folder = os.path.join(outdir, 'basecalled')
 basecall_tempfile = os.path.join(basecall_folder, 'tmp_file')
 merged_folder = os.path.join(outdir, 'merged')
 temp_fq = os.path.join(merged_folder, 'tmp.fq')
-final_fq = os.path.join(merged_folder, 'merged.fq.gz')
+merged_fq = os.path.join(merged_folder, 'merged.fq')
+sorted_fq = os.path.join(merged_folder, 'merged_sorted.fq')
+final_fq = os.path.join(merged_folder, 'merged_sorted.fq.gz')
 stats_dir = os.path.join(outdir, 'stats')
 if not os.path.isdir(stats_dir):
     os.makedirs(stats_dir)
@@ -75,7 +77,7 @@ rule reformat:
     input:
         temp_fq
     output:
-        final_fq
+        temp(merged_fq)
     params:
         memory = config['memory']
     log:
@@ -86,7 +88,6 @@ rule reformat:
         'in={input} '
         'interleaved=f '
         'out={output} '
-        'zl=9 '
         'bhist={stats_dir}/bhist.txt '
         'qhist={stats_dir}/qhist.txt '
         'qchist={stats_dir}/qchist.txt '
@@ -96,3 +97,23 @@ rule reformat:
         'gchist={stats_dir}/gchist.txt '
         'gcbins=auto '
         '2> {log}'
+
+# sort
+rule sort:
+    input:
+        merged_fq
+    output:
+        temp(sorted_fq)
+    run:
+        sort_fastq_by_readlength(input, output)
+
+# gzip
+rule compress:
+    input:
+        sorted_fq
+    output:
+        final_fq
+    log:
+        os.path.join(log_dir, 'compress.log')
+    shell:
+        'gzip -9 {input} > {output} 2> {log}'
