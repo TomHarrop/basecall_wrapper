@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
-from Bio import SeqIO
 from basecall_wrapper.__main__ import sort_fastq_by_readlength
 
-# get config variables
-#print('config: %s' % config)
+###########
+# GLOBALS #
+###########
+
+# from config
 outdir = config['outdir']
 raw_data = config['raw_data']
 log_dir = config['log_dir']
@@ -24,6 +26,10 @@ final_fq = os.path.join(merged_folder, 'merged_sorted.fq.gz')
 stats_dir = os.path.join(outdir, 'stats')
 if not os.path.isdir(stats_dir):
     os.makedirs(stats_dir)
+
+#########
+# RULES #
+#########
 
 # master rule
 rule all:
@@ -91,6 +97,7 @@ rule reformat:
         'in={input} '
         'interleaved=f '
         'out={output} '
+        'ow=t '
         'bhist={stats_dir}/bhist.txt '
         'qhist={stats_dir}/qhist.txt '
         'qchist={stats_dir}/qchist.txt '
@@ -104,11 +111,11 @@ rule reformat:
 # sort
 rule sort:
     input:
-        merged_fq
+        fq = merged_fq
     output:
-        temp(sorted_fq)
+        fq = temp(sorted_fq)
     run:
-        sort_fastq_by_readlength(input, output)
+        sort_fastq_by_readlength(input.fq, output.fq)
 
 # gzip
 rule compress:
@@ -119,4 +126,5 @@ rule compress:
     log:
         os.path.join(log_dir, 'compress.log')
     shell:
-        'gzip -9 {input} > {output} 2> {log}'
+        'gzip --best --to-stdout --verbose '
+        '{input} > {output} 2> {log}'

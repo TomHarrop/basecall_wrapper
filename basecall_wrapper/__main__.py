@@ -18,29 +18,6 @@ def generate_message(message_text):
     now = datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Y')
     print('[ %s ]: %s' % (now, message_text))
 
-# graph printing
-def print_graph(snakefile, config, dag_file):
-    # store old stdout
-    stdout = sys.stdout
-    # call snakemake api and capture output
-    sys.stdout = io.StringIO()
-    snakemake.snakemake(
-        snakefile,
-        config=config,
-        dryrun=True,
-        printdag=True)
-    output = sys.stdout.getvalue()
-    # restore sys.stdout
-    sys.stdout = stdout
-    # pipe the output to dot
-    with open(dag_file, 'wb') as svg:
-        dot_process = subprocess.Popen(
-            ['dot', '-Tsvg'],
-            stdin=subprocess.PIPE,
-            stdout=svg)
-        dot_process.communicate(input=output.encode())
-
-
 # fastq sorting
 def sort_fastq_by_readlength(input_fq, output_fq):
     '''Sort input_fq file and write to output_fq'''
@@ -63,6 +40,28 @@ def sort_fastq_by_readlength(input_fq, output_fq):
     SeqIO.write(sequences=ordered_records,
                 handle=output_fq,
                 format='fastq')
+
+# graph printing
+def print_graph(snakefile, config, dag_file):
+    # store old stdout
+    stdout = sys.stdout
+    # call snakemake api and capture output
+    sys.stdout = io.StringIO()
+    snakemake.snakemake(
+        snakefile,
+        config=config,
+        dryrun=True,
+        printdag=True)
+    output = sys.stdout.getvalue()
+    # restore sys.stdout
+    sys.stdout = stdout
+    # pipe the output to dot
+    with open(dag_file, 'wb') as svg:
+        dot_process = subprocess.Popen(
+            ['dot', '-Tsvg'],
+            stdin=subprocess.PIPE,
+            stdout=svg)
+        dot_process.communicate(input=output.encode())
 
 
 def main():
