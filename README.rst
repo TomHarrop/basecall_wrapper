@@ -7,7 +7,7 @@ Requirements
 ------------
 
 * ``python3`` 3.5 or newer with ``pip``
-* ``reformat.sh`` from the BBmap_ package
+* ``reformat.sh`` from the ``BBmap_`` package
 
 Installation
 ------------
