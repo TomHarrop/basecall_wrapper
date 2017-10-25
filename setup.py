@@ -10,11 +10,13 @@ from setuptools import find_packages
 
 # post-install albacore
 mac_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
-           'ont_albacore-1.2.6-cp36-cp36m-macosx_10_11_x86_64.whl')
+           'ont_albacore-2.0.2-cp36-cp36m-macosx_10_11_x86_64.whl')
 linux_py4_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
-                 'ont_albacore-1.2.6-cp34-cp34m-manylinux1_x86_64.whl')
+                 'ont_albacore-2.0.2-cp34-cp34m-manylinux1_x86_64.whl')
 linux_py5_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
-                 'ont_albacore-1.2.6-cp35-cp35m-manylinux1_x86_64.whl')
+                 'ont_albacore-2.0.2-cp35-cp35m-manylinux1_x86_64.whl')
+linux_py6_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
+                 'ont_albacore-2.0.2-cp36-cp36m-manylinux1_x86_64.whl')
 
 class PostInstallCommand(install):
     """Post-installation for installation mode."""
@@ -25,8 +27,10 @@ class PostInstallCommand(install):
         elif sys.platform.startswith('linux'):
             if sys.version_info.minor == 4:
                 pip.main(['install', linux_py4_url])
-            elif sys.version_info.minor > 4:
+            elif sys.version_info.minor == 5:
                 pip.main(['install', linux_py5_url])
+            elif sys.version_info.minor == 6:
+                pip.main(['install', linux_py6_url])
 
 # check if bbtools is installed
 bbmap_error = ('BBMap reformat.sh was not detected. '
@@ -49,7 +53,7 @@ def readme():
 # main setup script
 setup(
     name='basecall_wrapper',
-    version='0.0.10',
+    version='0.0.11',
     description='Tom\'s wrapper for ONT albacore',
     long_description=readme(),
     url='https://github.com/TomHarrop/basecall_wrapper',
