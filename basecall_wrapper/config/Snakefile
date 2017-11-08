@@ -77,7 +77,7 @@ rule merge:
     output:
         temp(temp_fq)
     shell:
-        'cat {input}/workspace/*.fastq | '
+        'cat {input}/workspace/pass/*.fastq | '
         'sed -e \'/^[[:space:]]*$/d\' > '
         '{output}'
 
