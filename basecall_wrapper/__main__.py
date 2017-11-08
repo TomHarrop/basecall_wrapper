@@ -10,6 +10,7 @@ from psutil import virtual_memory
 import subprocess
 import sys
 import snakemake
+import shutil
 
 
 # FUNCTIONS
@@ -41,8 +42,9 @@ def sort_fastq_by_readlength(input_fq, output_fq):
                 handle=output_fq,
                 format='fastq')
 
+
 # graph printing
-def print_graph(snakefile, config, dag_file):
+def print_graph(snakefile, config, dag_prefix):
     # store old stdout
     stdout = sys.stdout
     # call snakemake api and capture output
@@ -55,13 +57,21 @@ def print_graph(snakefile, config, dag_file):
     output = sys.stdout.getvalue()
     # restore sys.stdout
     sys.stdout = stdout
-    # pipe the output to dot
-    with open(dag_file, 'wb') as svg:
-        dot_process = subprocess.Popen(
-            ['dot', '-Tsvg'],
-            stdin=subprocess.PIPE,
-            stdout=svg)
-        dot_process.communicate(input=output.encode())
+    # write output
+    if shutil.which('dot'):
+        svg_file = '{}.svg'.format(dag_prefix)
+        # pipe the output to dot
+        with open(svg_file, 'wb') as svg:
+            dot_process = subprocess.Popen(
+                ['dot', '-Tsvg'],
+                stdin=subprocess.PIPE,
+                stdout=svg)
+            dot_process.communicate(input=output.encode())
+    else:
+        # write the file as dag
+        dag_file = '{}.dag'.format(dag_prefix)
+        with open(dag_file, 'wt') as file:
+            file.write(output)
 
 
 def main():
@@ -120,7 +130,7 @@ def main():
         os.makedirs(log_dir)
 
     # print before dag
-    print_graph(snakefile, args, os.path.join(log_dir, "before.svg"))
+    print_graph(snakefile, args, os.path.join(log_dir, "before"))
 
     # run the pipeline
     snakemake.snakemake(
@@ -130,7 +140,7 @@ def main():
         timestamp=True)
 
     # print after dag
-    print_graph(snakefile, args, os.path.join(log_dir, "after.svg"))
+    print_graph(snakefile, args, os.path.join(log_dir, "after"))
 
 
 if __name__ == '__main__':
