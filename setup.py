@@ -10,13 +10,13 @@ from setuptools import find_packages
 
 # post-install albacore
 mac_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
-           'ont_albacore-2.1.2-cp36-cp36m-macosx_10_11_x86_64.whl')
+           'ont_albacore-2.1.3-cp36-cp36m-macosx_10_11_x86_64.whl')
 linux_py4_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
-                 'ont_albacore-2.1.2-cp34-cp34m-manylinux1_x86_64.whl')
+                 'ont_albacore-2.1.3-cp34-cp34m-manylinux1_x86_64.whl')
 linux_py5_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
-                 'ont_albacore-2.1.2-cp35-cp35m-manylinux1_x86_64.whl')
+                 'ont_albacore-2.1.3-cp35-cp35m-manylinux1_x86_64.whl')
 linux_py6_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
-                 'ont_albacore-2.1.2-cp36-cp36m-manylinux1_x86_64.whl')
+                 'ont_albacore-2.1.3-cp36-cp36m-manylinux1_x86_64.whl')
 
 
 class PostInstallCommand(install):
@@ -54,7 +54,7 @@ def readme():
 # main setup script
 setup(
     name='basecall_wrapper',
-    version='0.0.14',
+    version='0.0.15',
     description='Tom\'s wrapper for ONT albacore',
     long_description=readme(),
     url='https://github.com/TomHarrop/basecall_wrapper',
