@@ -39,7 +39,8 @@ plot_histogram = get_full_path('plot_histogram.R')
 # master rule
 rule all:
     input:
-        final_fq        
+        final_fq,
+        os.path.join(stats_dir, 'length_histogram.pdf')      
 
 # unzip raw data to temp folder
 rule unzip:
