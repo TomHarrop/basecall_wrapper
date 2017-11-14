@@ -50,6 +50,6 @@ gp <- ggplot(lhist_log4, aes(x = lbin, y = count)) +
 ggsave(filename = snakemake@output[["plot"]],
     plot = gp,
     device = "pdf",
-    width = "10",
-    height = "7.5",
+    width = 10,
+    height = 7.5,
     units = "in")
