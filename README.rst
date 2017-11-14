@@ -7,7 +7,8 @@ Requirements
 ------------
 
 * ``python3`` 3.5 or newer with ``pip``
-* ``reformat.sh`` from the BBmap_ package
+* ``reformat.sh`` and ``statswrapper.sh`` from the BBmap_ package
+* ``R`` packages ``data.table`` and ``ggplot2``
 
 Installation
 ------------

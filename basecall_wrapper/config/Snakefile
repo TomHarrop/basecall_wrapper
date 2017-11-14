@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 from basecall_wrapper.__main__ import sort_fastq_by_readlength
+from basecall_wrapper.__main__ import get_full_path
+
 
 ###########
 # GLOBALS #
@@ -26,6 +28,9 @@ final_fq = os.path.join(merged_folder, 'merged_sorted.fq.gz')
 stats_dir = os.path.join(outdir, 'stats')
 if not os.path.isdir(stats_dir):
     os.makedirs(stats_dir)
+
+# scripts
+plot_histogram = get_full_path('plot_histogram.R')
 
 #########
 # RULES #
@@ -86,7 +91,8 @@ rule reformat:
     input:
         temp_fq
     output:
-        temp(merged_fq)
+        fq = temp(merged_fq),
+        lhist = os.path.join(stats_dir, 'lhist.txt')
     params:
         memory = config['memory']
     log:
@@ -96,14 +102,14 @@ rule reformat:
         '-Xmx{params.memory}g '
         'in={input} '
         'interleaved=f '
-        'out={output} '
+        'out={output.fq} '
         'ow=t '
         'bhist={stats_dir}/bhist.txt '
         'qhist={stats_dir}/qhist.txt '
         'qchist={stats_dir}/qchist.txt '
         'aqhist={stats_dir}/aqhist.txt '
         'bqhist={stats_dir}/bqhist.txt '
-        'lhist={stats_dir}/lhist.txt '
+        'lhist={output.lhist} '
         'gchist={stats_dir}/gchist.txt '
         'gcbins=auto '
         '2> {log}'
@@ -128,3 +134,13 @@ rule compress:
     shell:
         'gzip --best --to-stdout --verbose '
         '{input} > {output} 2> {log}'
+
+# plot histogram
+rule histogram:
+    input:
+        lhist = os.path.join(stats_dir, 'lhist.txt'),
+        fq = final_fq
+    output:
+        plot = os.path.join(stats_dir, 'length_histogram.pdf')
+    script:
+        '{}'.format(plot_histogram)

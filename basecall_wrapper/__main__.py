@@ -5,6 +5,7 @@ import datetime
 import io
 import os
 from Bio import SeqIO
+import pathlib
 from pkg_resources import resource_filename
 from psutil import virtual_memory
 import subprocess
@@ -18,6 +19,18 @@ def generate_message(message_text):
     """Format messages with date and time"""
     now = datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Y')
     print('[ %s ]: %s' % (now, message_text))
+
+
+def get_full_path(binary):
+    which = shutil.which(binary)
+    # check if the binary exists
+    if not which:
+        raise EnvironmentError(
+            'Dependency {0} not found in $PATH'.format(binary))
+    # get the full path to binary
+    binary_path = pathlib.Path(which).resolve()
+    return str(binary_path)
+
 
 # fastq sorting
 def sort_fastq_by_readlength(input_fq, output_fq):
