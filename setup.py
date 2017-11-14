@@ -54,7 +54,7 @@ def readme():
 # main setup script
 setup(
     name='basecall_wrapper',
-    version='0.0.16',
+    version='0.0.17',
     description='Tom\'s wrapper for ONT albacore',
     long_description=readme(),
     url='https://github.com/TomHarrop/basecall_wrapper',
@@ -81,6 +81,6 @@ setup(
         ],
     },
     scripts=[
-        'src/basecall_wrapper/plot_histogram.R'
+        'basecall_wrapper/plot_histogram.R'
     ],
     zip_safe=False)
