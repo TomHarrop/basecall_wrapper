@@ -18,9 +18,6 @@ linux_py5_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
 linux_py6_url = ('https://mirror.oxfordnanoportal.com/software/analysis/'
                  'ont_albacore-2.2.4-cp36-cp36m-manylinux1_x86_64.whl')
 
-
-https://mirror.oxfordnanoportal.com/software/analysis/ont_albacore-2.2.4-cp36-cp36m-manylinux1_x86_64.whl
-
 class PostInstallCommand(install):
     """Post-installation for installation mode."""
     def run(self):
