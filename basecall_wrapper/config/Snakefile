@@ -54,7 +54,7 @@ rule unzip:
     log:
         os.path.join(log_dir, 'unzip.log')
     shell:
-        'cat {input} | tar zxvf - -C {output.folder} -i &> {log}'
+        'cat {input} | tar zxvf - -C {output.folder} &> {log}'
 #        'tar xvf {input} -C {output.folder} &> {log}'
 
 # basecall
