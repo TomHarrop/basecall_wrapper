@@ -3,7 +3,10 @@
 
 import shutil
 import sys
-import pip
+try:
+    from pip import main as pipmain
+except:
+    from pip._internal import main as pipmain
 from setuptools import setup
 from setuptools.command.install import install
 from setuptools import find_packages
@@ -23,14 +26,14 @@ class PostInstallCommand(install):
     def run(self):
         install.run(self)
         if sys.platform == 'darwin':
-            pip.main(['install', mac_url])
+            pipmain(['install', mac_url])
         elif sys.platform.startswith('linux'):
             if sys.version_info.minor == 4:
-                pip.main(['install', linux_py4_url])
+                pipmain(['install', linux_py4_url])
             elif sys.version_info.minor == 5:
-                pip.main(['install', linux_py5_url])
+                pipmain(['install', linux_py5_url])
             elif sys.version_info.minor == 6:
-                pip.main(['install', linux_py6_url])
+                pipmain(['install', linux_py6_url])
 
 # check if bbtools is installed
 bbmap_error = ('BBMap reformat.sh was not detected. '
@@ -53,7 +56,7 @@ def readme():
 # main setup script
 setup(
     name='basecall_wrapper',
-    version='0.0.24',
+    version='0.0.25',
     description='Tom\'s wrapper for ONT albacore',
     long_description=readme(),
     url='https://github.com/TomHarrop/basecall_wrapper',
@@ -65,7 +68,7 @@ setup(
         'biopython>=1.70',
         'numpy>=1.13.1',
         'psutil>=5.2.2',
-        'snakemake>=4.0.0'        
+        'snakemake>=4.0.0'
     ],
     cmdclass={'install': PostInstallCommand},
     entry_points={
