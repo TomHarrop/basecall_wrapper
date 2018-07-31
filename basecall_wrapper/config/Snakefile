@@ -55,6 +55,7 @@ rule unzip:
     log:
         os.path.join(log_dir, 'unzip.log')
     shell:
+        'mkdir -p {params.folder} || exit 1 ; '
         'cat {input} | tar zxvf - -C {params.folder} &> {log}'
 #        'tar xvf {input} -C {output.folder} &> {log}'
 
@@ -63,7 +64,6 @@ rule basecall:
     input:
         unzip_folder
     output:
-        # temp(touch(basecall_tempfile)),
         basecall_folder
     params:
         kit = kit,
@@ -72,6 +72,7 @@ rule basecall:
     threads:
         config['threads']
     shell:
+        'mkdir -p {params.folder} || exit 1 ; '
         'read_fast5_basecaller.py '
         '--worker_threads {threads} '
         '--input {input} '
