@@ -49,9 +49,9 @@ rule unzip:
     input:
         raw_data
     output:
-        temp(touch(unzip_tmpfile)),
+        temp(unzip_folder)
     params:
-        folder = temp(unzip_folder)
+        folder = unzip_folder
     log:
         os.path.join(log_dir, 'unzip.log')
     shell:
@@ -63,7 +63,7 @@ rule basecall:
     input:
         unzip_folder
     output:
-        temp(touch(basecall_tempfile)),
+        # temp(touch(basecall_tempfile)),
         basecall_folder
     params:
         kit = kit,
