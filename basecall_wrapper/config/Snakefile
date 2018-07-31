@@ -64,6 +64,7 @@ rule basecall:
         unzip_folder
     output:
         temp(touch(basecall_tempfile)),
+        basecall_folder
     params:
         kit = kit,
         flowcell = flowcell,
