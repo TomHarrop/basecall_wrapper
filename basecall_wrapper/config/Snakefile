@@ -49,7 +49,7 @@ rule unzip:
     input:
         raw_data
     output:
-        temp(unzip_folder)
+        temp(directory(unzip_folder))
     params:
         folder = unzip_folder
     log:
@@ -64,7 +64,7 @@ rule basecall:
     input:
         unzip_folder
     output:
-        basecall_folder
+        directory(basecall_folder)
     params:
         kit = kit,
         flowcell = flowcell,
