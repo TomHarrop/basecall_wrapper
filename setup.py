@@ -56,7 +56,7 @@ def readme():
 # main setup script
 setup(
     name='basecall_wrapper',
-    version='0.0.26',
+    version='0.0.27',
     description='Tom\'s wrapper for ONT albacore',
     long_description=readme(),
     url='https://github.com/TomHarrop/basecall_wrapper',

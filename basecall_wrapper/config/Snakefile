@@ -50,11 +50,12 @@ rule unzip:
         raw_data
     output:
         temp(touch(unzip_tmpfile)),
+    params:
         folder = temp(unzip_folder)
     log:
         os.path.join(log_dir, 'unzip.log')
     shell:
-        'cat {input} | tar zxvf - -C {output.folder} &> {log}'
+        'cat {input} | tar zxvf - -C {params.folder} &> {log}'
 #        'tar xvf {input} -C {output.folder} &> {log}'
 
 # basecall
@@ -63,17 +64,17 @@ rule basecall:
         unzip_folder
     output:
         temp(touch(basecall_tempfile)),
-        folder = basecall_folder
     params:
         kit = kit,
-        flowcell = flowcell
+        flowcell = flowcell,
+        folder = basecall_folder
     threads:
         config['threads']
     shell:
         'read_fast5_basecaller.py '
         '--worker_threads {threads} '
         '--input {input} '
-        '--save_path {output.folder} '
+        '--save_path {params.folder} '
         '--flowcell {params.flowcell} '
         '--kit {params.kit} '
         '--recursive '
