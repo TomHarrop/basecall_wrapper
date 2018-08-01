@@ -3,7 +3,7 @@
 from basecall_wrapper.__main__ import sort_fastq_by_readlength
 from basecall_wrapper.__main__ import get_full_path
 import shutil
-import pathlib
+import pathlib2
 
 
 ###########

@@ -67,6 +67,7 @@ setup(
     install_requires=[
         'biopython>=1.70',
         'numpy>=1.13.1',
+        'pathlib2>=2.3.2',
         'psutil>=5.2.2',
         'snakemake>=4.0.0'
     ],
