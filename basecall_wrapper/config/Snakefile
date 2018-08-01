@@ -2,6 +2,7 @@
 
 from basecall_wrapper.__main__ import sort_fastq_by_readlength
 from basecall_wrapper.__main__ import get_full_path
+import shutil
 
 
 ###########
@@ -31,8 +32,6 @@ stats_dir = os.path.join(outdir, 'stats')
 if not os.path.isdir(stats_dir):
     os.makedirs(stats_dir)
 
-# scripts
-plot_histogram = get_full_path('plot_histogram.R')
 
 #########
 # RULES #
@@ -151,7 +150,7 @@ rule histogram:
     output:
         plot = os.path.join(stats_dir, 'length_histogram.pdf')
     script:
-        '{}'.format(plot_histogram)
+        shutil.which('plot_histogram.R')
 
 # qc script
 rule minion_qc:
