@@ -162,7 +162,7 @@ rule histogram:
     output:
         plot = os.path.join(stats_dir, 'length_histogram.pdf')
     script:
-        str(pathlib.Path(scripts_dir, 'plot_histogram.R').resolve())
+        str(pathlib2.Path(scripts_dir, 'plot_histogram.R').resolve())
 
 # qc script
 rule minion_qc:
