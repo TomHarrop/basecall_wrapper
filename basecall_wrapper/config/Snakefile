@@ -42,7 +42,8 @@ plot_histogram = get_full_path('plot_histogram.R')
 rule all:
     input:
         final_fq,
-        os.path.join(stats_dir, 'length_histogram.pdf')      
+        os.path.join(stats_dir, 'length_histogram.pdf'),
+        os.path.join(stats_dir, 'minionqc')
 
 # unzip raw data to temp folder
 rule unzip:
@@ -151,3 +152,17 @@ rule histogram:
         plot = os.path.join(stats_dir, 'length_histogram.pdf')
     script:
         '{}'.format(plot_histogram)
+
+# qc script
+rule minion_qc:
+    input:
+        basecall_folder
+    output:
+        directory(os.path.join(stats_dir, 'minionqc'))
+    log:
+        os.path.join(log_dir, 'minion_qc.log')
+    shell:
+        'MinIONQC.R '
+        '-i {input} '
+        '-o {output} '
+        '&> {log}'
