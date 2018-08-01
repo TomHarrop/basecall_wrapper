@@ -3,6 +3,7 @@
 from basecall_wrapper.__main__ import sort_fastq_by_readlength
 from basecall_wrapper.__main__ import get_full_path
 import shutil
+import pathlib
 
 
 ###########
@@ -31,7 +32,7 @@ final_fq = os.path.join(merged_folder, 'merged_sorted.fq.gz')
 stats_dir = os.path.join(outdir, 'stats')
 if not os.path.isdir(stats_dir):
     os.makedirs(stats_dir)
-
+scripts_dir = os.path.join(outdir, 'scripts')
 
 #########
 # RULES #
@@ -43,6 +44,16 @@ rule all:
         final_fq,
         os.path.join(stats_dir, 'length_histogram.pdf'),
         os.path.join(stats_dir, 'minionqc')
+
+# setup scripts
+rule setup_scripts:
+    input:
+        shutil.which('plot_histogram.R')
+    output:
+        temp(os.path.join(scripts_dir, 'plot_histogram.R'))
+    shell:
+        'cp {input} {output}'
+
 
 # unzip raw data to temp folder
 rule unzip:
@@ -146,11 +157,12 @@ rule compress:
 rule histogram:
     input:
         lhist = os.path.join(stats_dir, 'lhist.txt'),
-        fq = final_fq
+        fq = final_fq,
+        script = os.path.join(scripts_dir, 'plot_histogram.R')
     output:
         plot = os.path.join(stats_dir, 'length_histogram.pdf')
     script:
-        shutil.which('plot_histogram.R')
+        str(pathlib.Path(scripts_dir, 'plot_histogram.R').resolve())
 
 # qc script
 rule minion_qc:
