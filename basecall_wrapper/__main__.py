@@ -149,8 +149,7 @@ def main():
     snakemake.snakemake(
         snakefile=snakefile,
         config=args,
-        cores=args['threads'],
-        timestamp=True)
+        cores=args['threads'])
 
     # print after dag
     print_graph(snakefile, args, os.path.join(log_dir, "after"))
