@@ -67,8 +67,7 @@ rule unzip:
         os.path.join(log_dir, 'unzip.log')
     shell:
         'mkdir -p {params.folder} || exit 1 ; '
-        'cat {input} | tar zxvf - -C {params.folder} &> {log}'
-#        'tar xvf {input} -C {output.folder} &> {log}'
+        'cat {input} | tar izxvf - -C {params.folder} &> {log}'
 
 # basecall
 rule basecall:
