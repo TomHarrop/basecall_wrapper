@@ -17,8 +17,6 @@ log_dir = config['log_dir']
 flowcell = config['flowcell']
 kit = config['kit']
 
-print(raw_data)
-
 # intermediate files
 unzip_folder = os.path.join(outdir, 'unzipped_raw_data')
 unzip_tmpfile = os.path.join(unzip_folder, 'tmp_file')
