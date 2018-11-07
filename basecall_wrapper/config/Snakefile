@@ -2,6 +2,7 @@
 
 from basecall_wrapper.__main__ import sort_fastq_by_readlength
 from basecall_wrapper.__main__ import get_full_path
+import re
 import shutil
 import pathlib2
 
@@ -21,7 +22,6 @@ kit = config['kit']
 unzip_folder = os.path.join(outdir, 'unzipped_raw_data')
 unzip_tmpfile = os.path.join(unzip_folder, 'tmp_file')
 basecall_folder = os.path.join(outdir, 'basecalled')
-basecall_tempfile = os.path.join(basecall_folder, 'tmp_file')
 merged_folder = os.path.join(outdir, 'merged')
 temp_fq = os.path.join(merged_folder, 'tmp.fq')
 merged_fq = os.path.join(merged_folder, 'merged.fq')
@@ -32,6 +32,10 @@ if not os.path.isdir(stats_dir):
     os.makedirs(stats_dir)
 scripts_dir = os.path.join(outdir, 'scripts')
 
+# samples to get results for
+sample_names = [re.sub('\..+$', '', str(pathlib2.Path(x).name))
+                for x in raw_data]
+
 #########
 # RULES #
 #########
@@ -39,9 +43,11 @@ scripts_dir = os.path.join(outdir, 'scripts')
 # master rule
 rule all:
     input:
-        final_fq,
-        os.path.join(stats_dir, 'length_histogram.pdf'),
-        os.path.join(stats_dir, 'minionqc')
+        # final_fq,
+        # os.path.join(stats_dir, 'length_histogram.pdf'),
+        # os.path.join(stats_dir, 'minionqc')
+        expand('{}/{{sample_name}}'.format(basecall_folder),
+               sample_name=sample_names)
 
 # setup scripts
 rule setup_scripts:
@@ -54,25 +60,35 @@ rule setup_scripts:
 
 
 # unzip raw data to temp folder
-rule unzip:
+rule mv_raw_data:
     input:
         raw_data
     output:
-        temp(directory(unzip_folder))
+        temp(expand('{}/{{sample_name}}.tar.gz'.format(unzip_folder),
+                    sample_name=sample_names))
     params:
         folder = unzip_folder
-    log:
-        os.path.join(log_dir, 'unzip.log')
     shell:
         'mkdir -p {params.folder} || exit 1 ; '
-        'cat {input} | tar izxvf - -C {params.folder} &> {log}'
+        'cp {input} {params.folder}'
+
+rule unzip:
+    input:
+        '{}/{{sample_name}}.tar.gz'.format(unzip_folder)
+    output:
+        temp(directory('{}/{{sample_name}}'.format(unzip_folder)))
+    log:
+        os.path.join(log_dir, 'unzip_{sample_name}.log')
+    shell:
+        'mkdir -p {output} || exit 1 ; '
+        'tar -zxf {input} -C {output} --strip-components 1 &> {log}'
 
 # basecall
 rule basecall:
     input:
-        unzip_folder
+        '{}/{{sample_name}}'.format(unzip_folder)
     output:
-        directory(basecall_folder)
+        directory('{}/{{sample_name}}'.format(basecall_folder))
     params:
         kit = kit,
         flowcell = flowcell,
@@ -80,20 +96,23 @@ rule basecall:
     threads:
         config['threads']
     shell:
-        'mkdir -p {params.folder} || exit 1 ; '
+        # 'mkdir -p {params.folder} || exit 1 ; '
         'read_fast5_basecaller.py '
         '--worker_threads {threads} '
         '--input {input} '
-        '--save_path {params.folder} '
+        '--save_path {output} '
         '--flowcell {params.flowcell} '
         '--kit {params.kit} '
         '--recursive '
         '--output_format fastq '
 
+# UP TO HERE, NEED TO FIND FILES
+
 # merge
 rule merge:
     input:
-        basecall_folder
+        expand('{}/{{sample_name}}'.format(basecall_folder),
+               sample_name=sample_names)
     output:
         temp(temp_fq)
     shell:

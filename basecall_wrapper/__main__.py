@@ -132,6 +132,11 @@ def main():
         type=int,
         dest='memory',
         default=default_mem)
+    parser.add_argument(
+        '-n',
+        help='Don\'t run the pipeline. Just print the DAG and quit.',
+        dest='dry_run',
+        action='store_true')
 
     args = vars(parser.parse_args())
 
@@ -149,7 +154,9 @@ def main():
     snakemake.snakemake(
         snakefile=snakefile,
         config=args,
-        cores=args['threads'])
+        cores=args['threads'],
+        dryrun=args['dry_run'],
+        printshellcmds=True)
 
     # print after dag
     print_graph(snakefile, args, os.path.join(log_dir, "after"))
