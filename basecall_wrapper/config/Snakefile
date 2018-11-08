@@ -45,9 +45,10 @@ rule all:
     input:
         # final_fq,
         # os.path.join(stats_dir, 'length_histogram.pdf'),
-        # os.path.join(stats_dir, 'minionqc')
-        expand('{}/{{sample_name}}'.format(basecall_folder),
-               sample_name=sample_names)
+        os.path.join(stats_dir, 'minionqc'),
+        final_fq
+        # expand('{}/{{sample_name}}'.format(basecall_folder),
+        #        sample_name=sample_names)
 
 # setup scripts
 rule setup_scripts:
@@ -106,19 +107,25 @@ rule basecall:
         '--recursive '
         '--output_format fastq '
 
-# UP TO HERE, NEED TO FIND FILES
-
 # merge
-rule merge:
+rule merge_per_sample:
     input:
-        expand('{}/{{sample_name}}'.format(basecall_folder),
-               sample_name=sample_names)
+        '{}/{{sample_name}}'.format(basecall_folder)
     output:
-        temp(temp_fq)
+        temp('{}/{{sample_name}}.fastq'.format(merged_folder))
     shell:
         'cat {input}/workspace/pass/*.fastq | '
         'sed -e \'/^[[:space:]]*$/d\' > '
         '{output}'
+
+rule merge:
+    input:
+        expand('{}/{{sample_name}}.fastq'.format(merged_folder),
+               sample_name=sample_names)
+    output:
+        temp(temp_fq)
+    shell:
+        'cat {input} > {output}'
 
 # reformat
 rule reformat:
@@ -183,13 +190,21 @@ rule histogram:
 # qc script
 rule minion_qc:
     input:
-        basecall_folder
+        expand('{}/{{sample_name}}'.format(basecall_folder),
+               sample_name=sample_names)
     output:
         directory(os.path.join(stats_dir, 'minionqc'))
+    params:
+        basecall_folder = basecall_folder
     log:
         os.path.join(log_dir, 'minion_qc.log')
+    threads:
+        len(sample_names)
+    priority:
+        1
     shell:
         'MinIONQC.R '
-        '-i {input} '
+        '-i {params.basecall_folder} '
         '-o {output} '
+        '-p {threads} '
         '&> {log}'
