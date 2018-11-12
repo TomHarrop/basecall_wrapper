@@ -43,12 +43,9 @@ sample_names = [re.sub('\..+$', '', str(pathlib2.Path(x).name))
 # master rule
 rule all:
     input:
-        # final_fq,
-        # os.path.join(stats_dir, 'length_histogram.pdf'),
+        os.path.join(stats_dir, 'length_histogram.pdf'),
         os.path.join(stats_dir, 'minionqc'),
         final_fq
-        # expand('{}/{{sample_name}}'.format(basecall_folder),
-        #        sample_name=sample_names)
 
 # setup scripts
 rule setup_scripts:
